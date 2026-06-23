@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura K&K Essentials Jewelry | Timeless Elegance</title>
+    <style>
+        /* --- Design Tokens & Resets --- */
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-charcoal: #1C1C1C;
+            --soft-cream: #FDFBF7;
+            --muted-gray: #757575;
+            --white: #FFFFFF;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans: 'Montserrat', Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--soft-cream);
+            color: var(--dark-charcoal);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Multipage Router Logic --- */
+        .page-view {
+            display: none; /* Hide all pages by default */
+            flex: 1;
+        }
+
+        .page-view.active-page {
+            display: block; /* Only display the targeted page */
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        /* --- Typography --- */
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        /* --- Header & Navigation --- */
+        header {
+            background-color: var(--white);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        .logo span {
+            color: var(--primary-gold);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a:hover, .nav-links a.active-link {
+            color: var(--primary-gold);
+        }
+
+        .cart-icon-btn {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .cart-count {
+            background-color: var(--primary-gold);
+            color: var(--white);
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            position: relative;
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            padding: 0 1rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            font-family: var(--font-serif);
+            font-style: italic;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2.5rem;
+            background-color: var(--primary-gold);
+            color: var(--white);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            border: 1px solid var(--primary-gold);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--dark-charcoal);
+            color: var(--white);
+            border-color: var(--dark-charcoal);
+        }
+
+        /* --- Layout Containers --- */
+        .sections-container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-gold);
+            margin: 0.5rem auto 0;
+        }
+
+        /* --- Products Grid --- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .product-card {
+            background-color: var(--white);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            height: 350px;
+            background-color: #eee;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .product-info h3 {
+            font-size: 1.2rem;
+        }
+
+        .product-price {
+            color: var(--primary-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .add-to-cart-btn {
+            background-color: var(--dark-charcoal);
+            color: var(--white);
+            border: none;
+            padding: 0.6rem;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: var(--primary-gold);
+        }
+
+        /* --- Collections Page Style --- */
+        .collections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .collection-card {
+            position: relative;
+            height: 450px;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .collection-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+
+        .collection-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(28,28,28,0.8) 10%, rgba(28,28,28,0.2) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2.5rem;
+            color: var(--white);
+        }
+
+        .collection-overlay h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .collection-overlay p {
+            font-size: 0.9rem;
+            color: #d1d1d1;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .collection-card:hover img {
+            transform: scale(1.06);
+        }
+
+        .collection-link {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-gold);
+            font-weight: 600;
+            align-self: flex-start;
+        }
+
+        /* --- About Section (With CEO Portrait) --- */
+        .about-section {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
+
+        .about-block {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .about-block.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .about-image {
+            flex: 1;
+            height: 500px;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 15px 15px 0px rgba(212, 175, 55, 0.1);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .about-content {
+            flex: 1;
+        }
+
+        .about-content p {
+            margin-bottom: 1.5rem;
+            color: var(--muted-gray);
+            font-size: 1.05rem;
+        }
+
+        .about-content .highlight {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            color: var(--dark-charcoal);
+            line-height: 1.4;
+            font-style: italic;
+            border-left: 3px solid var(--primary-gold);
+            padding-left: 1.5rem;
+        }
+
+        /* --- Contact Page Style --- */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info-panel h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info-panel p {
+            color: var(--muted-gray);
+            margin-bottom: 2rem;
+        }
+
+        .info-details {
+            list-style: none;
+        }
+
+        .info-details li {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-details label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-gold);
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .info-details span {
+            font-size: 1.1rem;
+        }
+
+        .contact-form {
+            background-color: var(--white);
+            padding: 3rem;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.9rem;
+            border: 1px solid #E5E5E5;
+            background-color: var(--soft-cream);
+            font-family: var(--font-sans);
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary-gold);
+        }
+
+        /* --- NEW: Interactive Cart Page Interface --- */
+        .cart-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .cart-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .empty-cart-msg {
+            text-align: center;
+            padding: 3rem;
+            color: var(--muted-gray);
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--white);
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+        }
+
+        .cart-item-details {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .cart-item-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .cart-item-title h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .cart-item-price {
+            color: var(--primary-gold);
+            font-weight: 600;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .remove-item-btn {
+            background: none;
+            border: none;
+            color: #C0392B;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cart-summary-panel {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            height: fit-content;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .summary-total {
+            border-top: 1px solid #E5E5E5;
+            padding-top: 1rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--dark-charcoal);
+            color: var(--white);
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+
+        .footer-section h4 {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            color: var(--primary-gold);
+        }
+
+        .footer-section p, .footer-section ul {
+            color: #b3b3b3;
+            font-size: 0.9rem;
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 2rem;
+            font-size: 0.8rem;
+            color: var(--muted-gray);
+        }
+
+        /* --- Hamburger Button --- */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            z-index: 1100;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: var(--dark-charcoal);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        .hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* --- Responsive Queries --- */
+        @media (max-width: 992px) {
+            .about-block, .about-block.reverse {
+                flex-direction: column;
+                gap: 2.5rem;
+            }
+            .about-image {
+                width: 100%;
+                height: 400px;
+            }
+            .contact-container, .cart-wrapper {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem 1.2rem;
+                flex-wrap: wrap;
+                position: relative;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                gap: 0;
+                background-color: var(--white);
+                border-top: 1px solid #eee;
+                padding: 0.5rem 0 1rem;
+                margin-top: 0.5rem;
+            }
+
+            .nav-links.mobile-open {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+                text-align: left;
+            }
+
+            .nav-links li a,
+            .nav-links li .cart-icon-btn {
+                display: block;
+                width: 100%;
+                padding: 0.75rem 1.2rem;
+                font-size: 1rem;
+                border-bottom: 1px solid #f5f5f5;
+            }
+
+            .nav-links li:last-child a,
+            .nav-links li:last-child .cart-icon-btn {
+                border-bottom: none;
+            }
+
+            .cart-icon-btn {
+                justify-content: flex-start;
+            }
+
+            .hero-content h1 { font-size: 2rem; }
+            .hero-content p { font-size: 1rem; }
+            .sections-container { padding: 0 1.2rem; margin: 2rem auto; }
+            .contact-form { padding: 2rem 1.2rem; }
+            .product-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            .logo { font-size: 1.2rem; }
+            .hero-content h1 { font-size: 1.7rem; }
+            .section-title { font-size: 1.7rem; }
+            .product-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+            .product-image { height: 220px; }
+            .collections-grid { grid-template-columns: 1fr; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Flowing Notice Banner --- */
+        .notice-banner {
+            background: linear-gradient(90deg, var(--dark-charcoal) 0%, #2a2a2a 50%, var(--dark-charcoal) 100%);
+            color: var(--primary-gold);
+            padding: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-top: 2px solid var(--primary-gold);
+            border-bottom: 2px solid var(--primary-gold);
+            position: relative;
+            z-index: 999;
+        }
+
+        .notice-track {
+            display: inline-flex;
+            animation: marquee 28s linear infinite;
+            gap: 0;
+        }
+
+        .notice-track span {
+            display: inline-block;
+            padding: 0.7rem 3rem;
+            font-size: 0.88rem;
+            font-family: var(--font-serif);
+            font-style: italic;
+            letter-spacing: 1.5px;
+        }
+
+        .notice-track .notice-dot {
+            color: var(--primary-gold);
+            padding: 0.7rem 0;
+            font-size: 1rem;
+        }
+
+        @keyframes marquee {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- Pagination Styles --- */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            background: none;
+            border: 1px solid #ddd;
+            color: var(--dark-charcoal);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            min-width: 40px;
+        }
+
+        .pagination button:hover,
+        .pagination button.active-page-btn {
+            background-color: var(--primary-gold);
+            color: var(--white);
+            border-color: var(--primary-gold);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            font-size: 0.85rem;
+            color: var(--muted-gray);
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Flowing Notice Banner -->
+    <div class="notice-banner">
+        <div class="notice-track" id="notice-track">
+            <span>✦ Our store is not yet operational until further notice...</span>
+            <span class="notice-dot">◆</span>
+            <span>Check back later and buy from us — something beautiful is on its way.</span>
+            <span class="notice-dot">◆</span>
+            <span>✦ Our store is not yet operational until further notice...</span>
+            <span class="notice-dot">◆</span>
+            <span>Check back later and buy from us — something beautiful is on its way.</span>
+            <span class="notice-dot">◆</span>
+            <span>✦ Our store is not yet operational until further notice...</span>
+            <span class="notice-dot">◆</span>
+            <span>Check back later and buy from us — something beautiful is on its way.</span>
+            <span class="notice-dot">◆</span>
+            <span>✦ Our store is not yet operational until further notice...</span>
+            <span class="notice-dot">◆</span>
+            <span>Check back later and buy from us — something beautiful is on its way.</span>
+            <span class="notice-dot">◆</span>
+        </div>
+    </div>
+
+    <!-- Header / Navigation -->
+    <header>
+        <nav class="nav-container">
+            <div class="logo" onclick="navigateTo('home')">AURA <span>K&K JEWELRY</span></div>
+
+            <!-- Hamburger Button (mobile only) -->
+            <button class="hamburger" id="hamburger-btn" aria-label="Open menu" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-links" id="nav-links">
+                <li><a id="link-home" onclick="navigateTo('home')" class="active-link">Home</a></li>
+                <li><a id="link-shop" onclick="navigateTo('shop')">Shop</a></li>
+                <li><a id="link-collections" onclick="navigateTo('collections')">Collections</a></li>
+                <li><a id="link-about" onclick="navigateTo('about')">Our Story</a></li>
+                <li><a id="link-contact" onclick="navigateTo('contact')">Contact</a></li>
+                <li>
+                    <button class="cart-icon-btn" onclick="navigateTo('cart')">
+                        Bag (<span class="cart-count" id="global-cart-count">0</span>)
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- PAGE 1: HOME PAGE -->
+    <div id="page-home" class="page-view active-page">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Discover Your Radiant Aura</h1>
+                <p>Everyday essential luxury jewelry items crafted for your unique glow.</p>
+                <a onclick="navigateTo('shop')" class="btn">Shop The Collection</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE 2: SHOP PAGE (Paginated) -->
+    <div id="page-shop" class="page-view">
+        <main class="sections-container">
+            <h2 class="section-title">The Essentials Collection</h2>
+            <div class="product-grid" id="shop-product-grid"></div>
+            <div class="page-info" id="shop-page-info"></div>
+            <div class="pagination" id="shop-pagination"></div>
+        </main>
+    </div>
+
+    <!-- PAGE 3: COLLECTIONS PAGE -->
+    <div id="page-collections" class="page-view">
+        <section class="sections-container">
+            <h2 class="section-title">Shop By Category</h2>
+            <div class="collections-grid">
+                <div class="collection-card">
+                    <img src="https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=600&q=80" alt="Timeless Rings Collection">
+                    <div class="collection-overlay">
+                        <h3>Timeless Rings</h3>
+                        <p>Designed for subtle stacking or strong solo statements.</p>
+                        <a onclick="navigateTo('shop')" class="collection-link">Explore →</a>
+                    </div>
+                </div>
+                <div class="collection-card">
+                    <img src="https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=600&q=80" alt="Elegant Necklaces Collection">
+                    <div class="collection-overlay">
+                        <h3>Essential Chains</h3>
+                        <p>Pure metal structures engineered to contour gracefully.</p>
+                        <a onclick="navigateTo('shop')" class="collection-link">Explore →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE 4: ABOUT PAGE -->
+    <div id="page-about" class="page-view">
+        <section class="sections-container">
+            <h2 class="section-title">Our Story</h2>
+            <div class="about-section">
+                <!-- Segment 1: Brand History -->
+                <div class="about-block">
+                    <div class="about-image">
+                        <img src="https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=800&q=80" alt="Crafting Aura K&K Jewelry">
+                    </div>
+                    <div class="about-content">
+                        <p class="highlight">"We believe luxury shouldn't be reserved for special events. True luxury is an everyday element, woven into who you are."</p>
+                        <p>Aura K&K Essentials Jewelry was born out of a passion to define minimal luxury for modern expression. Each item is meticulously curated to act as a natural extension of your personal energy, mirroring light, confidence, and quiet sophistication.</p>
+                        <p>We work with ethically sourced, enduring materials built to maintain their brilliant finish through your active daily routines.</p>
+                    </div>
+                </div>
+
+                <!-- Segment 2: Meet The CEO -->
+                <div class="about-block reverse">
+                    <div class="about-image">
+                        <img src="photo_2026-06-23_19-25-10.jpg" alt="Thelma Woods — CEO of Aura K&K Essentials" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80'">
+                    </div>
+                    <div class="about-content">
+                        <h3 style="font-size: 1.8rem; margin-bottom: 0.4rem;">Meet Our CEO</h3>
+                        <p style="font-family: var(--font-serif); font-size: 1.3rem; color: var(--primary-gold); margin-bottom: 1.2rem; font-style: italic; letter-spacing: 1px;">Thelma Woods</p>
+                        <p>Driven by an editorial design ethos and structural purity, Thelma Woods established Aura K&K Essentials to bridge the gap between high-end fashion design and daily resilience.</p>
+                        <p>With a visionary eye for pristine aesthetics and modern elegance, Thelma personally inspects and shapes every collection to ensure it leaves a radiant, unforgettable mark on the world.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE 5: CONTACT PAGE -->
+    <div id="page-contact" class="page-view">
+        <section class="sections-container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-container">
+                <div class="contact-info-panel">
+                    <h3>We'd Love To Hear From You</h3>
+                    <p>Have questions about sizing, materials, custom selections, or shipping updates? Drop us a message.</p>
+                    <ul class="info-details">
+                        <li><label>General Inquiries</label><span>hello@aurakkessentials.com</span></li>
+                        <li><label>Our Showroom</label><span>Aura Flagship District, Suite 400</span></li>
+                        <li><label>Hours</label><span>Mon - Sat: 9am - 6pm EST</span></li>
+                    </ul>
+                </div>
+                <div class="contact-form">
+                    <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Thank you for reaching out!');">
+                        <div class="form-group"><label>Your Name</label><input type="text" required placeholder="John Doe"></div>
+                        <div class="form-group"><label>Email Address</label><input type="email" required placeholder="john@example.com"></div>
+                        <div class="form-group"><label>Message</label><textarea rows="5" required placeholder="How can we help?"></textarea></div>
+                        <button type="submit" class="btn" style="width: 100%; border:none;">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE 6: NEW INTERACTIVE CART PAGE -->
+    <div id="page-cart" class="page-view">
+        <section class="sections-container">
+            <h2 class="section-title">Your Shopping Bag</h2>
+            <div class="cart-wrapper">
+                <div class="cart-items-list" id="cart-items-container">
+                    <!-- Dynamic Cart Items Inject Via JS Here -->
+                </div>
+                <div class="cart-summary-panel">
+                    <h3 style="margin-bottom: 1.5rem;">Order Summary</h3>
+                    <div class="summary-row"><p>Subtotal</p><p id="cart-subtotal">$0.00</p></div>
+                    <div class="summary-row"><p>Shipping</p><p>Complimentary</p></div>
+                    <div class="summary-row summary-total"><p>Total</p><p id="cart-total">$0.00</p></div>
+                    <button class="btn" style="width: 100%; margin-top: 1.5rem; border: none;" onclick="alert('Proceeding to integrated payment checkpoint...')">Checkout Now</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>AURA K&K</h4>
+                <p>Curated essential jewelry pieces built to stand the test of time.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Customer Care</h4>
+                <ul><li><a>Shipping & Returns</a></li><li><a>Jewelry Care</a></li></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul><li><a>Instagram</a></li><li><a>Newsletter</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2026 Aura K&K Essentials Jewelry. All rights reserved.</p></div>
+    </footer>
+
+    <!-- --- JavaScript Functional Engines --- -->
+    <script>
+        // =============================================
+        // 1. PRODUCT CATALOG — 30 Items
+        // =============================================
+        const allProducts = [
+            { name: 'Aura Minimalist Chain', price: 145.00, img: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=500&q=80' },
+            { name: 'K&K Classic Hoops', price: 98.00,  img: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Signature Aura Ring', price: 120.00, img: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Golden Cascade Necklace', price: 165.00, img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Pearl Drop Earrings', price: 88.00,  img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Twisted Gold Bangle', price: 112.00, img: 'https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Celestial Star Pendant', price: 135.00, img: 'https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Delicate Layering Chain', price: 79.00,  img: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Hammered Gold Cuff', price: 158.00, img: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Sculptural Ear Cuff', price: 65.00,  img: 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Infinity Band Ring', price: 95.00,  img: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Dainty Anklet Chain', price: 58.00,  img: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Vintage Locket Necklace', price: 178.00, img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Geo Triangle Studs', price: 72.00,  img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Wide Dome Ring', price: 108.00, img: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Snake Chain Bracelet', price: 92.00,  img: 'https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Crescent Moon Charm', price: 84.00,  img: 'https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Teardrop Pendant Set', price: 130.00, img: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Herringbone Chain', price: 155.00, img: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Pavé Diamond Band', price: 245.00, img: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Oval Signet Ring', price: 118.00, img: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Chain Link Choker', price: 99.00,  img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Ball Stud Earrings', price: 55.00,  img: 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Bold Rope Bracelet', price: 125.00, img: 'https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Wishbone Ring', price: 76.00,  img: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Asymmetric Drop Earrings', price: 102.00, img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Gold Filled Tennis Bracelet', price: 192.00, img: 'https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Open Circle Pendant', price: 88.00,  img: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Stacked Ring Set (x3)', price: 145.00, img: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Baroque Pearl Necklace', price: 210.00, img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Feather Charm Anklet', price: 68.00,  img: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=500&q=80' },
+            { name: 'Bezel Set Solitaire Ring', price: 175.00, img: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=500&q=80' },
+        ];
+
+        // =============================================
+        // 2. PAGINATION STATE
+        // =============================================
+        const ITEMS_PER_PAGE = 12;
+        let currentPage = 1;
+
+        function getTotalPages() {
+            return Math.ceil(allProducts.length / ITEMS_PER_PAGE);
+        }
+
+        function renderShopPage(page) {
+            currentPage = page;
+            const start = (page - 1) * ITEMS_PER_PAGE;
+            const end   = start + ITEMS_PER_PAGE;
+            const pageItems = allProducts.slice(start, end);
+
+            const grid = document.getElementById('shop-product-grid');
+            grid.innerHTML = pageItems.map(p => `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${p.img}" alt="${p.name}" loading="lazy">
+                    </div>
+                    <div class="product-info">
+                        <h3>${p.name}</h3>
+                        <p class="product-price">$${p.price.toFixed(2)}</p>
+                        <button class="add-to-cart-btn" onclick="addToCart('${p.name.replace(/'/g,"\\'")}', ${p.price}, '${p.img}')">Add To Bag</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Page info text
+            document.getElementById('shop-page-info').textContent =
+                `Showing ${start + 1}–${Math.min(end, allProducts.length)} of ${allProducts.length} items`;
+
+            // Pagination buttons
+            const total = getTotalPages();
+            const pag = document.getElementById('shop-pagination');
+            let btns = `<button onclick="renderShopPage(${page - 1})" ${page === 1 ? 'disabled' : ''}>&#8592; Prev</button>`;
+            for (let i = 1; i <= total; i++) {
+                btns += `<button class="${i === page ? 'active-page-btn' : ''}" onclick="renderShopPage(${i})">${i}</button>`;
+            }
+            btns += `<button onclick="renderShopPage(${page + 1})" ${page === total ? 'disabled' : ''}>Next &#8594;</button>`;
+            pag.innerHTML = btns;
+
+            window.scrollTo(0, 0);
+        }
+
+        // =============================================
+        // 3. SPA Multipage Router Logic
+        // =============================================
+        function toggleMenu() {
+            const nav = document.getElementById('nav-links');
+            const btn = document.getElementById('hamburger-btn');
+            nav.classList.toggle('mobile-open');
+            btn.classList.toggle('open');
+        }
+
+        function closeMenu() {
+            document.getElementById('nav-links').classList.remove('mobile-open');
+            document.getElementById('hamburger-btn').classList.remove('open');
+        }
+
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page-view').forEach(page => page.classList.remove('active-page'));
+            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active-link'));
+
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) {
+                targetPage.classList.add('active-page');
+                window.scrollTo(0, 0);
+            }
+
+            const targetLink = document.getElementById(`link-${pageId}`);
+            if (targetLink) targetLink.classList.add('active-link');
+
+            closeMenu(); // always close mobile menu after navigation
+
+            if (pageId === 'cart') renderCartPage();
+            if (pageId === 'shop') renderShopPage(currentPage);
+        }
+
+        // =============================================
+        // 4. Shopping Cart State
+        // =============================================
+        let cart = [];
+
+        function addToCart(name, price, image) {
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name, price, image, quantity: 1 });
+            }
+            updateCartUI();
+            alert(`${name} successfully added to your shopping bag.`);
+        }
+
+        function removeFromCart(name) {
+            cart = cart.filter(item => item.name !== name);
+            updateCartUI();
+            renderCartPage();
+        }
+
+        function updateCartUI() {
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('global-cart-count').innerText = totalCount;
+        }
+
+        function renderCartPage() {
+            const container = document.getElementById('cart-items-container');
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="empty-cart-msg">Your shopping bag is currently empty.</div>`;
+                document.getElementById('cart-subtotal').innerText = "$0.00";
+                document.getElementById('cart-total').innerText = "$0.00";
+                return;
+            }
+
+            let htmlContent = '';
+            let subtotal = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                htmlContent += `
+                    <div class="cart-item">
+                        <div class="cart-item-details">
+                            <img src="${item.image}" class="cart-item-img" alt="${item.name}">
+                            <div class="cart-item-title">
+                                <h4>${item.name}</h4>
+                                <p class="cart-item-price">$${item.price.toFixed(2)} x ${item.quantity}</p>
+                            </div>
+                        </div>
+                        <div class="cart-item-actions">
+                            <button class="remove-item-btn" onclick="removeFromCart('${item.name.replace(/'/g,"\\'")}')">Remove</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = htmlContent;
+            document.getElementById('cart-subtotal').innerText = `$${subtotal.toFixed(2)}`;
+            document.getElementById('cart-total').innerText = `$${subtotal.toFixed(2)}`;
+        }
+
+        // =============================================
+        // 5. Init on Page Load
+        // =============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            renderShopPage(1);
+        });
+    </script>
+</body>
+</html>
